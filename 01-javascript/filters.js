@@ -1,6 +1,4 @@
-import { state } from './config.js'
 
-state.count++
 
 // console.log(state)
 
