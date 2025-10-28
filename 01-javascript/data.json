@@ -30,7 +30,7 @@
     "ubicacion": "Guadalajara",
     "descripcion": "Buscamos un desarrollador de aplicaciones móviles con experiencia en iOS y/o Android. El candidato debe tener conocimientos en Swift, Kotlin y el desarrollo de interfaces de usuario.",
     "data": {
-      "technology": "mobile",
+      "technology": ["mobile", "angular js", "angular"],
       "modalidad": "guadalajara",
       "nivel": "mid-level"
     }
