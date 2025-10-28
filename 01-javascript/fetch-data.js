@@ -54,11 +54,15 @@ function createFilters(jobs) {
   const niveles = [...new Set(jobs.map(j => j.data.nivel))].sort();
   const tecnologias = [
     ...new Set(
-      jobs.flatMap(j =>
-        Array.isArray(j.data.technology) ? j.data.technology : [j.data.technology]
-      )
+      jobs.flatMap(j => {
+        const techs = Array.isArray(j.data.technology)
+          ? j.data.technology
+          : [j.data.technology];
+        return techs.map(t => t.toLowerCase().trim());
+      })
     ),
-  ].sort();
+  ].sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+
 
   filtersContainer.innerHTML = `
     <div class="search-bar">
