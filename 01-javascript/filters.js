@@ -13,6 +13,9 @@ export function createFilters(jobs, onFilterChange) {
         })
       ),
     ].sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+
+    const ubicaciones = [...new Set(jobs.map(j => j.ubicacion))].sort();
+
     filtersContainer.innerHTML = `
     <div class="search-bar">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-search">
@@ -37,6 +40,12 @@ export function createFilters(jobs, onFilterChange) {
       <option value="">Todas las tecnologías</option>
       ${tecnologias.map(t => `<option value="${t}">${t}</option>`).join('')}
     </select>
+
+    <select id="ubicaciones">
+      <option value="">Todas las ubicaciones</option>
+      ${ubicaciones.map(t => `<option value="${t}">${t}</option>`).join('')}
+    </select>
+
   `;
 
     filtersContainer.addEventListener('input', onFilterChange);

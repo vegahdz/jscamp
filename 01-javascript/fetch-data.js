@@ -94,6 +94,8 @@ function applyFilters() {
   const modalidad = document.querySelector('#modalidad').value;
   const nivel = document.querySelector('#nivel').value;
   const technology = document.querySelector('#technology').value;
+  const ubicaciones = document.querySelector('#ubicaciones').value;
+
 
   filteredJobs = allJobs.filter(job => {
     const titleMatch = job.titulo.toLowerCase().includes(search);
@@ -103,8 +105,10 @@ function applyFilters() {
       ? job.data.technology
       : [job.data.technology];
     const technologyMatch = !technology || techs.includes(technology);
+    const ubicacionMatch = !ubicaciones || job.ubicacion === ubicaciones;
 
-    return titleMatch && modalidadMatch && nivelMatch && technologyMatch;
+
+    return titleMatch && modalidadMatch && nivelMatch && technologyMatch && ubicacionMatch
   });
 
   currentPage = 1;
