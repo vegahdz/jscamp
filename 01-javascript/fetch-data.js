@@ -1,4 +1,4 @@
-import {createFilters} from './filters.js';
+import { createFilters } from './filters.js';
 
 const container = document.querySelector('.jobs-listings');
 const paginationContainer = document.querySelector('.pagination');
@@ -15,14 +15,13 @@ fetch("./data.json")
     allJobs = jobs;
     filteredJobs = jobs;
     renderJobs();
-    createFilters(allJobs);
+    createFilters(allJobs, applyFilters); // ✅ pasa la función
     renderPagination();
   });
 
 function renderJobs() {
   container.innerHTML = '';
 
-  // calcular los índices
   const start = (currentPage - 1) * RESULTS_PER_PAGE;
   const end = start + RESULTS_PER_PAGE;
   const jobsToShow = filteredJobs.slice(start, end);
@@ -30,13 +29,6 @@ function renderJobs() {
   jobsToShow.forEach(job => {
     const article = document.createElement('article');
     article.className = 'job-listing-card';
-
-    article.dataset.modalidad = job.data.modalidad;
-    article.dataset.nivel = job.data.nivel;
-    article.dataset.technology = Array.isArray(job.data.technology)
-      ? job.data.technology.join(',')
-      : job.data.technology;
-
     article.innerHTML = `
       <div>
         <h3>${job.titulo}</h3>
@@ -49,23 +41,18 @@ function renderJobs() {
   });
 }
 
-
-// 4️⃣ Paginador dinámico
 function renderPagination() {
   paginationContainer.innerHTML = '';
   const totalPages = Math.ceil(filteredJobs.length / RESULTS_PER_PAGE);
+  if (totalPages <= 1) return;
+
   const previousBtn = document.createElement('button');
-  previousBtn.innerHTML = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
-  `;
+  previousBtn.textContent = '<';
   previousBtn.disabled = currentPage === 1;
 
   const nextBtn = document.createElement('button');
-  nextBtn.innerHTML = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>  `;
+  nextBtn.textContent = '>';
   nextBtn.disabled = currentPage === totalPages;
-
-  if (totalPages <= 1) return; // no mostrar si no hace falta
 
   for (let i = 1; i <= totalPages; i++) {
     const btn = document.createElement('button');
@@ -80,6 +67,8 @@ function renderPagination() {
   }
 
   paginationContainer.prepend(previousBtn);
+  paginationContainer.appendChild(nextBtn);
+
   previousBtn.addEventListener('click', () => {
     if (currentPage > 1) {
       currentPage--;
@@ -88,7 +77,6 @@ function renderPagination() {
     }
   });
 
-  paginationContainer.appendChild(nextBtn);
   nextBtn.addEventListener('click', () => {
     if (currentPage < totalPages) {
       currentPage++;
@@ -96,4 +84,30 @@ function renderPagination() {
       renderPagination();
     }
   });
+}
+
+// ✅ mover applyFilters aquí
+function applyFilters() {
+  const search = document.querySelector('#search').value.toLowerCase();
+  const modalidad = document.querySelector('#modalidad').value;
+  const nivel = document.querySelector('#nivel').value;
+  const technology = document.querySelector('#technology').value;
+
+  filteredJobs = allJobs.filter(job => {
+    const titleMatch = job.titulo.toLowerCase().includes(search);
+    const modalidadMatch = !modalidad || job.data.modalidad === modalidad;
+    const nivelMatch = !nivel || job.data.nivel === nivel;
+    const techs = Array.isArray(job.data.technology)
+      ? job.data.technology
+      : [job.data.technology];
+    const technologyMatch = !technology || techs.includes(technology);
+
+    return titleMatch && modalidadMatch && nivelMatch && technologyMatch;
+  });
+
+  currentPage = 1;
+  renderJobs();
+  renderPagination();
+
+  console.log(filteredJobs);
 }
