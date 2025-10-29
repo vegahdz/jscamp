@@ -32,6 +32,8 @@ function renderJobs() {
     article.innerHTML = `
       <div>
         <h3>${job.titulo}</h3>
+        <h4>${job.data.modalidad} | ${job.data.nivel}</h4>
+        <p>${job.data.technology}</p>
         <small>${job.empresa} | ${job.ubicacion}</small>
         <p>${job.descripcion}</p>
       </div>

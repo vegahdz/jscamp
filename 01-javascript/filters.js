@@ -4,13 +4,15 @@ export function createFilters(jobs, onFilterChange) {
     const modalidades = [...new Set(jobs.map(j => j.data.modalidad))].sort();
     const niveles = [...new Set(jobs.map(j => j.data.nivel))].sort();
     const tecnologias = [
-        ...new Set(
-            jobs.flatMap(j =>
-                Array.isArray(j.data.technology) ? j.data.technology : [j.data.technology]
-            )
-        ),
-    ].sort();
-
+      ...new Set(
+        jobs.flatMap(j => {
+          const techs = Array.isArray(j.data.technology)
+            ? j.data.technology
+            : [j.data.technology];
+          return techs.map(t => t.toLowerCase().trim());
+        })
+      ),
+    ].sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
     filtersContainer.innerHTML = `
     <div class="search-bar">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-search">
