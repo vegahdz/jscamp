@@ -1,9 +1,9 @@
 import { createFilters } from './filters.js';
+import { applyFilters } from './applyFilters.js';
 
-const container = document.querySelector('.jobs-listings');
-const paginationContainer = document.querySelector('.pagination');
 
 const RESULTS_PER_PAGE = 5;
+
 let allJobs = [];
 let filteredJobs = [];
 let currentPage = 1;
@@ -15,12 +15,43 @@ fetch("./data.json")
     allJobs = jobs;
     filteredJobs = jobs;
     renderJobs();
-    createFilters(allJobs, applyFilters); // ✅ pasa la función
     renderPagination();
+    createFilters(allJobs, onFilterChange);
   });
 
+// Función que se llama al cambiar filtros
+function onFilterChange(filtersValues) {
+  filteredJobs = applyFilters(allJobs, filtersValues);
+  currentPage = 1;
+  renderJobs();
+  renderPagination();
+}
+
+// Función para pintar trabajos
 function renderJobs() {
+  const container = document.querySelector('.jobs-listings');
   container.innerHTML = '';
+
+
+  if (filteredJobs.length === 0) {
+    container.innerHTML = `
+    <section class="no-results">
+      <p>No se encontraron empleos que coincidan con los filtros aplicados.</p>
+      <button class="button-clear-filters">Limpiar filtros</button>
+    </section
+    `;
+    const clearBtn = document.querySelector('.button-clear-filters');
+    clearBtn.addEventListener('click', () => {
+      filteredJobs = allJobs;
+      currentPage = 1;
+      renderJobs();
+      renderPagination();
+      // Resetear los filtros en el formulario
+      const formFilters = document.querySelector('#jobs-search-form');
+      formFilters.reset();
+    });
+    return;
+  }
 
   const start = (currentPage - 1) * RESULTS_PER_PAGE;
   const end = start + RESULTS_PER_PAGE;
@@ -33,7 +64,7 @@ function renderJobs() {
       <div>
         <h3>${job.titulo}</h3>
         <h4>${job.data.modalidad} | ${job.data.nivel}</h4>
-        <p>${job.data.technology}</p>
+        <p>${Array.isArray(job.data.technology) ? job.data.technology.join(', ') : job.data.technology}</p>
         <small>${job.empresa} | ${job.ubicacion}</small>
         <p>${job.descripcion}</p>
       </div>
@@ -43,17 +74,24 @@ function renderJobs() {
   });
 }
 
+// Función para pintar la paginación
 function renderPagination() {
+  const paginationContainer = document.querySelector('.pagination');
   paginationContainer.innerHTML = '';
+
   const totalPages = Math.ceil(filteredJobs.length / RESULTS_PER_PAGE);
   if (totalPages <= 1) return;
 
   const previousBtn = document.createElement('button');
-  previousBtn.textContent = '<';
+  previousBtn.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
+  `;
   previousBtn.disabled = currentPage === 1;
 
   const nextBtn = document.createElement('button');
-  nextBtn.textContent = '>';
+  nextBtn.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+  `;
   nextBtn.disabled = currentPage === totalPages;
 
   for (let i = 1; i <= totalPages; i++) {
@@ -86,33 +124,4 @@ function renderPagination() {
       renderPagination();
     }
   });
-}
-
-// ✅ mover applyFilters aquí
-function applyFilters() {
-  const search = document.querySelector('#search').value.toLowerCase();
-  const modalidad = document.querySelector('#modalidad').value;
-  const nivel = document.querySelector('#nivel').value;
-  const technology = document.querySelector('#technology').value;
-  const ubicaciones = document.querySelector('#ubicaciones').value;
-
-
-  filteredJobs = allJobs.filter(job => {
-    const titleMatch = job.titulo.toLowerCase().includes(search);
-    const modalidadMatch = !modalidad || job.data.modalidad === modalidad;
-    const nivelMatch = !nivel || job.data.nivel === nivel;
-    const techs = Array.isArray(job.data.technology)
-      ? job.data.technology
-      : [job.data.technology];
-    const technologyMatch = !technology || techs.includes(technology);
-    const ubicacionMatch = !ubicaciones || job.ubicacion === ubicaciones;
-
-
-    return titleMatch && modalidadMatch && nivelMatch && technologyMatch && ubicacionMatch;
-  });
-
-  currentPage = 1;
-  renderJobs();
-  renderPagination();
-
 }

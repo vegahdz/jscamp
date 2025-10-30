@@ -514,3 +514,17 @@ article {
     width: 100%;
   }
 }
+
+
+section{
+
+  .no-results{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    justify-content: center;
+    padding: 3rem;
+    width: 100%;
+  }
+}
