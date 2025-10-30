@@ -108,12 +108,11 @@ function applyFilters() {
     const ubicacionMatch = !ubicaciones || job.ubicacion === ubicaciones;
 
 
-    return titleMatch && modalidadMatch && nivelMatch && technologyMatch && ubicacionMatch
+    return titleMatch && modalidadMatch && nivelMatch && technologyMatch && ubicacionMatch;
   });
 
   currentPage = 1;
   renderJobs();
   renderPagination();
 
-  console.log(filteredJobs);
 }
