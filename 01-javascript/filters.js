@@ -43,7 +43,7 @@ export function createFilters(jobs, onFilterChange) {
 
     <select id="ubicaciones">
       <option value="">Todas las ubicaciones</option>
-      ${ubicaciones.map(t => `<option value="${t}">${t}</option>`).join('')}
+      ${ubicaciones.map(u => `<option value="${u}">${u}</option>`).join('')}
     </select>
 
   `;
