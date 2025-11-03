@@ -40,7 +40,7 @@ export function createFilters(jobs, onFilterChange) {
       ${tecnologias.map(t => `<option value="${t}">${t}</option>`).join('')}
     </select>
 
-    <select id="ubicaciones">
+    <select id="ubicacion">
       <option value="">Todas las ubicaciones</option>
       ${ubicaciones.map(u => `<option value="${u}">${u}</option>`).join('')}
     </select>
@@ -52,7 +52,7 @@ export function createFilters(jobs, onFilterChange) {
       modalidad: document.querySelector('#modalidad').value,
       nivel: document.querySelector('#nivel').value,
       technology: document.querySelector('#technology').value,
-      ubicaciones: document.querySelector('#ubicaciones').value,
+      ubicacion: document.querySelector('#ubicacion').value,
     };
     onFilterChange(values);
   }

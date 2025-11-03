@@ -64,7 +64,7 @@ export function renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs)
     <section class="no-results">
         <p>No se encontraron empleos que coincidan con los filtros aplicados.</p>
         <button class="button-clear-filters">Limpiar filtros</button>
-    </section
+    </section>
     `;
         const clearBtn = document.querySelector('.button-clear-filters');
         clearBtn.addEventListener('click', () => {
