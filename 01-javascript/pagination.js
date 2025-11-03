@@ -1,6 +1,6 @@
 
 // Función para pintar la paginación
-export function renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage) {
+export function renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs) {
     const paginationContainer = document.querySelector('.pagination');
     paginationContainer.innerHTML = '';
 
@@ -25,8 +25,8 @@ export function renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage) {
         btn.className = i === currentPage ? 'is-active' : '';
         btn.addEventListener('click', () => {
             currentPage = i;
-            renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage);
-            renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage);
+            renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
+            renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
         });
         paginationContainer.appendChild(btn);
     }
@@ -37,16 +37,16 @@ export function renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage) {
     previousBtn.addEventListener('click', () => {
         if (currentPage > 1) {
             currentPage--;
-            renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage);
-            renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage);
+            renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
+            renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
         }
     });
 
     nextBtn.addEventListener('click', () => {
         if (currentPage < totalPages) {
             currentPage++;
-            renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage);
-            renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage);
+            renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
+            renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
         }
     });
 }
@@ -54,7 +54,7 @@ export function renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage) {
 
 
 // Función para pintar trabajos
-export function renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage) {
+export function renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs) {
     const container = document.querySelector('.jobs-listings');
     container.innerHTML = '';
 
@@ -70,8 +70,8 @@ export function renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage) {
         clearBtn.addEventListener('click', () => {
             filteredJobs = allJobs;
             currentPage = 1;
-            renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage);
-            renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage);
+            renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
+            renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
             // Resetear los filtros en el formulario
             const formFilters = document.querySelector('#jobs-search-form');
             formFilters.reset();
