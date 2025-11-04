@@ -1,49 +1,62 @@
-import { state } from './config.js'
+export function createFilters(jobs, onFilterChange) {
+  const filtersContainer = document.querySelector('#jobs-search-form');
 
-state.count++
+  const modalidades = [...new Set(jobs.map(j => j.data.modalidad))].sort();
+  const niveles = [...new Set(jobs.map(j => j.data.nivel))].sort();
+  const tecnologias = [
+    ...new Set(
+      jobs.flatMap(j => {
+        const techs = Array.isArray(j.data.technology)
+          ? j.data.technology
+          : [j.data.technology];
+        return techs.map(t => t.toLowerCase().trim());
+      })
+    ),
+  ].sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+  const ubicaciones = [...new Set(jobs.map(j => j.ubicacion))].sort();
 
-// console.log(state)
+  filtersContainer.innerHTML = `
+    <div class="search-bar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-search">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+        <path d="M21 21l-6 -6"></path>
+      </svg>
+      <input type="text" id="search" placeholder="Buscar por título...">
+    </div>
 
-const filter = document.querySelector('#filter-location')
-const mensaje = document.querySelector('#filter-selected-value')
+    <select id="modalidad">
+      <option value="">Todas las modalidades</option>
+      ${modalidades.map(m => `<option value="${m}">${m}</option>`).join('')}
+    </select>
 
-filter.addEventListener('change', function () {
-  const jobs = document.querySelectorAll('.job-listing-card')
+    <select id="nivel">
+      <option value="">Todos los niveles</option>
+      ${niveles.map(n => `<option value="${n}">${n}</option>`).join('')}
+    </select>
 
-  const selectedValue = filter.value
+    <select id="technology">
+      <option value="">Todas las tecnologías</option>
+      ${tecnologias.map(t => `<option value="${t}">${t}</option>`).join('')}
+    </select>
 
-  if (selectedValue) {
-    mensaje.textContent = `Has seleccionado: ${selectedValue}`
-  } else {
-    mensaje.textContent = ''
+    <select id="ubicacion">
+      <option value="">Todas las ubicaciones</option>
+      ${ubicaciones.map(u => `<option value="${u}">${u}</option>`).join('')}
+    </select>
+  `;
+
+  function emitFilterChange() {
+    const values = {
+      search: document.querySelector('#search').value,
+      modalidad: document.querySelector('#modalidad').value,
+      nivel: document.querySelector('#nivel').value,
+      technology: document.querySelector('#technology').value,
+      ubicacion: document.querySelector('#ubicacion').value,
+    };
+    onFilterChange(values);
   }
 
-  jobs.forEach(job => {
-    // const modalidad = job.dataset.modalidad
-    const modalidad = job.getAttribute('data-modalidad')
-    const isShown = selectedValue === '' || selectedValue === modalidad
-    job.classList.toggle('is-hidden', isShown === false)
-  })
-})
-
-
-
-const inputSearch = document.querySelector('#empleos-search-input');
-
-inputSearch.addEventListener('input', function () {
-
-  const searchValue = inputSearch.value.toLowerCase();
-  console.log(searchValue);
-
-  const jobs = document.querySelectorAll('.job-listing-card')
-
-
-  jobs.forEach(job => {
-    const titleText = job.querySelector('h3').textContent.toLowerCase()
-    // console.log(titleText);
-    const coincide = titleText.includes(searchValue);
-    console.log(coincide);
-    job.classList.toggle('is-hidden', !coincide)
-  });
-
-});
+  filtersContainer.addEventListener('input', emitFilterChange);
+  filtersContainer.addEventListener('change', emitFilterChange);
+}

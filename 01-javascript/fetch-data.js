@@ -1,27 +1,36 @@
-const container = document.querySelector('.jobs-listings')
+import { createFilters } from './filters.js';
+import { applyFilters } from './applyFilters.js';
+import { renderPagination } from './pagination.js'
+import { renderJobs } from './jobs.js'
 
-const RESULTS_PER_PAGE = 3
 
-fetch("./data.json") /* fetch es asíncrono */
-  .then((response) => {
-    return response.json();
-  })
-  .then((jobs) => {
-    jobs.forEach(job => {
-      const article = document.createElement('article')
-      article.className = 'job-listing-card'
-      
-      article.dataset.modalidad = job.data.modalidad
-      article.dataset.nivel = job.data.nivel
-      article.dataset.technology = job.data.technology
+const RESULTS_PER_PAGE = 5;
 
-      article.innerHTML = `<div>
-          <h3>${job.titulo}</h3>
-          <small>${job.empresa} | ${job.ubicacion}</small>
-          <p>${job.descripcion}</p>
-        </div>
-        <button class="button-apply-job">Aplicar</button>`
+let allJobs = [];
+let filteredJobs = [];
+let currentPage = 1;
 
-      container.appendChild(article)
-    })
+// 1️⃣ Cargar y pintar empleos
+fetch("./data.json")
+  .then(res => res.json())
+  .then(jobs => {
+    allJobs = jobs;
+    filteredJobs = jobs;
+    renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs, onPageChange);
+    renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, onPageChange);
+    createFilters(allJobs, onFilterChange);
   });
+
+// Función que se llama al cambiar filtros
+function onFilterChange(filtersValues) {
+  filteredJobs = applyFilters(allJobs, filtersValues);
+  currentPage = 1;
+  renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs, onPageChange);
+  renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, onPageChange);
+}
+
+function onPageChange(newPage, filteredJobs) {
+  currentPage = newPage;
+  renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs, onPageChange);
+  renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, onPageChange);
+}
