@@ -1,6 +1,6 @@
 
 // Función para pintar la paginación
-export function renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs) {
+export function renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, onPageChange) {
     const paginationContainer = document.querySelector('.pagination');
     paginationContainer.innerHTML = '';
 
@@ -23,41 +23,23 @@ export function renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, al
         const btn = document.createElement('button');
         btn.textContent = i;
         btn.className = i === currentPage ? 'is-active' : '';
-        btn.addEventListener('click', () => {
-            currentPage = i;
-            renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
-            renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
-        });
+        btn.addEventListener('click', () => onPageChange(i, filteredJobs));
         paginationContainer.appendChild(btn);
     }
 
     paginationContainer.prepend(previousBtn);
     paginationContainer.appendChild(nextBtn);
 
-    previousBtn.addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--;
-            renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
-            renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
-        }
-    });
-
-    nextBtn.addEventListener('click', () => {
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
-            renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
-        }
-    });
+    previousBtn.addEventListener('click', () => onPageChange(currentPage - 1, filteredJobs));
+    nextBtn.addEventListener('click', () => onPageChange(currentPage + 1, filteredJobs));
 }
 
 
 
 // Función para pintar trabajos
-export function renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs) {
+export function renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs, onPageChange) {
     const container = document.querySelector('.jobs-listings');
     container.innerHTML = '';
-
 
     if (filteredJobs.length === 0) {
         container.innerHTML = `
@@ -66,16 +48,24 @@ export function renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs)
         <button class="button-clear-filters">Limpiar filtros</button>
     </section>
     `;
+
         const clearBtn = document.querySelector('.button-clear-filters');
         clearBtn.addEventListener('click', () => {
-            filteredJobs = allJobs;
-            currentPage = 1;
-            renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
-            renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs);
-            // Resetear los filtros en el formulario
             const formFilters = document.querySelector('#jobs-search-form');
             formFilters.reset();
+
+            // Fuerza que se apliquen los filtros “vacíos”
+            const event = new Event('input', { bubbles: true });
+            formFilters.dispatchEvent(event);
+
+            // Opcional: volver a la primera página
+            filteredJobs = allJobs;
+            const currentPage = 1;
+
+            renderJobs(filteredJobs, RESULTS_PER_PAGE, currentPage, allJobs, onPageChange);
+            renderPagination(filteredJobs, RESULTS_PER_PAGE, currentPage, onPageChange);
         });
+
         return;
     }
 
