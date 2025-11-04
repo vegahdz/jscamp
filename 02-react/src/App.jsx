@@ -2,7 +2,7 @@ export function App() {
 
   return (
     <>
-      Hello World
+      <a href="/src/empleos.html">Ir a la página de empleos</a>
     </>
   )
 }
