@@ -1,6 +1,7 @@
 import { createFilters } from './filters.js';
 import { applyFilters } from './applyFilters.js';
-import { renderPagination, renderJobs } from './pagination.js'
+import { renderPagination } from './pagination.js'
+import { renderJobs } from './jobs.js'
 
 
 const RESULTS_PER_PAGE = 5;
