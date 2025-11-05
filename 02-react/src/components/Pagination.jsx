@@ -4,8 +4,8 @@ import { IconChevronRight } from '@tabler/icons-react';
 export function Pagination(props) {
 
     const {
-        currentPage,
-        totalPages
+        currentPage = 1,
+        totalPages = 1,
     } = props;
 
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
