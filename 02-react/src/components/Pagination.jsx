@@ -1,4 +1,5 @@
-
+import { IconChevronLeft } from '@tabler/icons-react';
+import { IconChevronRight } from '@tabler/icons-react';
 
 export function Pagination(props) {
 
@@ -12,7 +13,9 @@ export function Pagination(props) {
     return (
         <>
             <nav className="pagination">
-                <button>-</button>
+                <button>
+                    <IconChevronLeft />
+                </button>
                 {pages.map(page => (
                     <button
                         key={page}
@@ -21,7 +24,9 @@ export function Pagination(props) {
                         {page}
                     </button>
                 ))}
-                <button>+</button>
+                <button>
+                    <IconChevronRight />
+                </button>
             </nav>
         </>
     )
