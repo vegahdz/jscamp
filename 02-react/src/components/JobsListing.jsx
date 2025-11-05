@@ -22,7 +22,7 @@ export function JobsListing() {
                     <div className="jobs-listings">
                     </div>
 
-                    <nav className="pagination">
+                    <nav className="pagination" style={{ display: 'none' }}>
 
                     </nav>
                 </section>
