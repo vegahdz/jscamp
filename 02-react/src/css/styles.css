@@ -430,6 +430,7 @@ article {
     display: flex; /* valor original */
     align-items: start;
     gap: 1rem;
+    justify-content: space-between;
 
     &.is-hidden {
       display: none;
@@ -500,7 +501,6 @@ article {
 
   &.is-applied {
     background: #4caf50;
-    pointer-events: none;
   }
 }
 

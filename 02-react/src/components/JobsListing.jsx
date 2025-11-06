@@ -1,32 +1,34 @@
-export function JobsListing() {
+import { JobCard } from '@/components/JobCard.jsx'
+
+export function JobsListing({ jobs }) {
 
     return (
-        <>
-            <main>
-                <section className="jobs-search">
-                    <h1>Encuentra tu próximo trabajo</h1>
-                    <p>Explora miles de oportunidades en el sector tecnológico.</p>
+        <main>
+            <section className="jobs-search">
+                <h1>Encuentra tu próximo trabajo</h1>
+                <p>Explora miles de oportunidades en el sector tecnológico.</p>
 
-                    <form id="jobs-search-form" role="search">
-
-
-                    </form>
+                <form id="jobs-search-form" role="search">
 
 
-                    <span id="filter-selected-value"></span>
-                </section>
+                </form>
 
-                <section>
-                    <h2>Resultados de búsqueda</h2>
+                <span id="filter-selected-value"></span>
+            </section>
 
-                    <div className="jobs-listings">
-                    </div>
+            <section>
+                <h2>Resultados de búsqueda</h2>
 
-                    <nav className="pagination" style={{ display: 'none' }}>
+                <div className="jobs-listings">
+                    {jobs.map(job => (
+                        <JobCard
+                            key={job.id}
+                            job={job}
+                        />
+                    ))}
+                </div>
 
-                    </nav>
-                </section>
-            </main>
-        </>
+            </section>
+        </main>
     )
 }

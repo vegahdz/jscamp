@@ -3,6 +3,7 @@ import { Header } from '@/components/Header.jsx'
 import { JobsListing } from '@/components/JobsListing.jsx'
 import { Footer } from '@/components/Footer.jsx'
 import { Pagination } from '@/components/Pagination.jsx'
+import jobsData from '@/data/jobs.json'
 
 export function Empleos() {
 
@@ -16,8 +17,12 @@ export function Empleos() {
     return (
         <>
             <Header />
-            <JobsListing />
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+            <JobsListing jobs={jobsData} />
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
             <Footer />
         </>
     )
