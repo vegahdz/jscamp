@@ -1,6 +1,8 @@
 import { IconChevronLeft } from '@tabler/icons-react';
 import { IconChevronRight } from '@tabler/icons-react';
 
+import styles from '@/components/Pagination.module.css';
+
 export function Pagination(props) {
 
     const {
@@ -36,7 +38,7 @@ export function Pagination(props) {
     }
 
     return (
-        <nav className="pagination">
+        <nav className={styles.pagination}>
 
             <button
                 disabled={currentPage === 1}
@@ -48,7 +50,7 @@ export function Pagination(props) {
             {pages.map(page => (
                 <button
                     key={page}
-                    className={currentPage === page ? 'is-active': ''}
+                    className={currentPage === page ? styles.isActive : ''}
                     onClick={(event) => handleChangePage(event, page)}
                 >
                     {page}
