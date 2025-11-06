@@ -14,6 +14,11 @@ export function JobCard(props) {
         setIsApplied(!isApplied);
     }
 
+    const buttonClasses = isApplied ? 'button-apply-job is-applied' : 'button-apply-job';
+    const buttonText = isApplied ? 'Aplicado' : 'Aplicar';
+
+
+
     return(
         <article className="job-listing-card">
             <div>
@@ -24,11 +29,11 @@ export function JobCard(props) {
                 <p>{descripcion}</p>
             </div>
             <button
-                className={`button-apply-job ${isApplied ? 'is-applied' : ''}`}
+                className={buttonClasses}
                 onClick={handleClick}
                 type="button"
             >
-                {isApplied ? 'Aplicado' : 'Aplicar'}
+                {buttonText}
             </button>
         </article>
     )
