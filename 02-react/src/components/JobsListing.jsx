@@ -1,3 +1,4 @@
+import { JobsSearchForm } from '@/components/JobsSearchForm.jsx'
 import { JobCard } from '@/components/JobCard.jsx'
 
 export function JobsListing({ jobs }) {
@@ -8,10 +9,7 @@ export function JobsListing({ jobs }) {
                 <h1>Encuentra tu próximo trabajo</h1>
                 <p>Explora miles de oportunidades en el sector tecnológico.</p>
 
-                <form id="jobs-search-form" role="search">
-
-
-                </form>
+                <JobsSearchForm />
 
                 <span id="filter-selected-value"></span>
             </section>
