@@ -1,17 +1,20 @@
+import { Link } from 'react-router-dom'
 import { IconCode } from '@tabler/icons-react';
 
 export function Header() {
     return (
         <>
             <header>
-                <h1>
-                    <IconCode />
-                    DevJobs
-                </h1>
-
+                <Link to="/" style={{ color: 'white', textDecoration: 'none'}}>
+                    <h1>
+                        <IconCode />
+                        DevJobs
+                    </h1>
+                </Link>
                 <nav>
-                    <a href="../index.html">Inicio</a>
-                    <a href="./empleos.html">Empleos</a>
+                    <Link to="/">Inicio</Link> |{" "}
+                    <Link to="/empleos/">Empleos</Link> |{" "}
+                    <Link to="/contacto/">Contacto</Link>
                 </nav>
 
                 <div>
@@ -25,7 +28,6 @@ export function Header() {
                     </devjobs-avatar>
                 </div>
             </header>
-
         </>
     )
 }

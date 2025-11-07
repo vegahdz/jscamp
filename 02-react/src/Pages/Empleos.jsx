@@ -7,17 +7,14 @@ import jobsData from '@/data/jobs.json'
 
 const RESULTS_PER_PAGE = 7;
 
-
-export function Empleos() {
-
+export default function Empleos() {
     const [currentPage, setCurrentPage] = useState(1)
-    const totalPages = Math.ceil(jobsData.length / RESULTS_PER_PAGE);
+    const totalPages = Math.ceil(jobsData.length / RESULTS_PER_PAGE)
 
-    const PagedResults =  jobsData.slice(
+    const PagedResults = jobsData.slice(
         (currentPage - 1) * RESULTS_PER_PAGE,
         currentPage * RESULTS_PER_PAGE
     )
-
 
     const handlePageChange = (page) => {
         setCurrentPage(page)
