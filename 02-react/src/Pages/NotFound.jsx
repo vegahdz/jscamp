@@ -6,12 +6,8 @@ export default function NotFound() {
     const navigate = useNavigate()
 
     const goBack = () => {
-        // Si hay historial previo, retrocede; si no, manda al home
-        if (window.history.state && window.history.length > 2) {
-            navigate(-1)
-        } else {
-            navigate('/')
-        }
+        const history = window.history.state && window.history.length > 2;
+        history ? navigate(-1) : navigate('/');
     }
 
     return (
