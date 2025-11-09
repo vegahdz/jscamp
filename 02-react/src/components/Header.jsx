@@ -12,8 +12,8 @@ export function Header() {
                     </h1>
                 </Link>
                 <nav>
-                    <Link to="/">Inicio</Link> |{" "}
-                    <Link to="/empleos/">Empleos</Link> |{" "}
+                    <Link to="/">Inicio</Link> |
+                    <Link to="/empleos/">Empleos</Link> |
                     <Link to="/contacto/">Contacto</Link>
                 </nav>
 
