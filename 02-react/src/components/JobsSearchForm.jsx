@@ -11,9 +11,24 @@ export function JobsSearchForm() {
     const idTechnology = useId();
     const idUbicacion = useId();
 
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        console.log("cambio");
+
+        const formData = new FormData(event.currentTarget);
+
+        const filters = {
+            technology: formData.get(idTechnology),
+            modalidad: formData.get(idModalidad),
+            nivel: formData.get(idNivel),
+            search: formData.get(idSearch),
+            ubicacion: formData.get(idUbicacion)
+        }
+    }
 
     return (
-        <form name={idJobsSearchForm} id="jobs-search-form" role="search">
+        <form onChange={handleSubmit} name={idJobsSearchForm} id="jobs-search-form" role="search">
             <div className="search-bar">
                 <IconSearch />
                 <input type="text" name={idSearch} id="search" placeholder="Buscar por título..." />
