@@ -1,4 +1,5 @@
 import express from 'express'
+import jobs from './jobs.json' with { type: 'json' }
 import ms from 'ms';
 
 
@@ -8,6 +9,11 @@ const app = express()
 
 app.get('/', (request, response) => {
     return response.send('<h1>Hello World!</h1>')
+})
+
+
+app.get('/get-jobs', (request, response) => {
+    return response.json(jobs)
 })
 
 
